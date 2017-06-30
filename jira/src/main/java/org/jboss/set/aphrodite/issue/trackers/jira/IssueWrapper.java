@@ -59,6 +59,7 @@ import org.jboss.set.aphrodite.domain.IssueType;
 import org.jboss.set.aphrodite.domain.Release;
 import org.jboss.set.aphrodite.domain.Stage;
 import org.jboss.set.aphrodite.domain.User;
+import org.jboss.set.aphrodite.jira.rest.client.internal.json.CustomIssue;
 import org.jboss.set.aphrodite.spi.NotFoundException;
 
 import com.atlassian.jira.rest.client.api.domain.BasicComponent;
@@ -133,6 +134,7 @@ class IssueWrapper {
         setPullRequests(issue, jiraIssue);
         setIssueSprintRelease(issue, jiraIssue);
         setLabels(issue, jiraIssue);
+        setChangelog(issue, jiraIssue);
         setResolution(issue, jiraIssue);
     }
 
@@ -144,6 +146,14 @@ class IssueWrapper {
             jiraLabels.forEach(name -> labels.add(new JiraLabel(name)));
 
         issue.setLabels(labels);
+    }
+
+    private void setChangelog(JiraIssue issue, com.atlassian.jira.rest.client.api.domain.Issue jiraIssue) {
+        List<JiraChangelogGroup> changelog = new ArrayList<>();
+        if (jiraIssue instanceof CustomIssue) {
+            changelog = ((CustomIssue) jiraIssue).getCustomChangelog();
+        }
+        issue.setChangelog(changelog);
     }
 
     private void setResolution(JiraIssue issue, com.atlassian.jira.rest.client.api.domain.Issue jiraIssue) {
