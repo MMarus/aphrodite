@@ -65,6 +65,7 @@ public class CustomIssueJsonParser extends IssueJsonParser {
                 changelogJsonParser, new String[] { "changelog", "histories" });
 
         // Remove changelog from the json to avoid it's double parsing
+        issueJson.remove("changelog");
         Issue issue = super.parse(issueJson);
 
         CustomIssue customIssue = new CustomIssue(issue, jiraChangelog);
